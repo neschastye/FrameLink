@@ -1,0 +1,10 @@
+.tools/
+bundle/mkcert.bin
+/dist/
+*.exe
+*.test
+*.pem
+*.key
+*.pfx
+*.cer
+.env

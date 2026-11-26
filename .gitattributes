@@ -1,0 +1,4 @@
+# go:embed includes the exact bytes of web assets and license notices.
+* text=auto eol=lf
+# Preserve the upstream license texts verbatim.
+licenses/*.txt whitespace=-blank-at-eol

@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+    <meta name="color-scheme" content="dark" />
+    <title>Панель управления · FrameLink</title>
+    <link rel="icon" href="/mark.svg" />
+    <link rel="stylesheet" href="/style.css" />
+    <script type="module" src="/dashboard.js"></script>
+  </head>
+  <body>
+    <header id="top">
+      <div class="topbar">
+        <a class="brand" href="#top" aria-label="FrameLink"
+          ><img src="/mark.svg" alt="" />Frame<span>Link</span></a
+        ><span class="divider"></span
+        ><span class="product">Локальная студия</span
+        ><span class="linkstate" id="linkState" role="status"
+          >Подключение…</span
+        >
+      </div>
+    </header>
+    <main class="wrap">
+      <div class="pagehead">
+        <div>
+          <h1>Видеостудия</h1>
+        </div>
+        <button class="primary" id="stream" disabled>
+          <span class="playmark" aria-hidden="true"></span
+          ><span id="streamLabel">Начать трансляцию</span>
+        </button>
+      </div>
+      <div class="layout">
+        <div class="stack">
+          <section class="panel monitor">
+            <div class="panelhead">
+              <h2>Монитор</h2>
+              <label class="switch"
+                ><input type="checkbox" id="preview" /><span></span
+                >Предпросмотр</label
+              >
+            </div>
+            <div class="stage" id="stage">
+              <video id="video" autoplay playsinline muted></video>
+              <div class="standby" id="standby">
+                <span class="focus-icon" aria-hidden="true">◎</span
+                ><strong id="stageTitle">Предпросмотр выключен</strong
+                ><small id="stageHint"
+                  >Включите монитор для проверки кадра.</small
+                >
+              </div>
+              <i class="corner tl"></i><i class="corner tr"></i
+              ><i class="corner bl"></i><i class="corner br"></i>
+            </div>
+            <div class="monitorfoot">
+              <span
+                ><i class="dot" id="camDot"></i
+                ><span id="camStatus">Ожидание iPhone</span></span
+              ><span class="mono" id="frameSize">— × —</span>
+            </div>
+          </section>
+          <section class="panel">
+            <div class="panelhead">
+              <h2>Статистика потока</h2>
+              <span class="subtle" id="statsSource">Нет потока</span>
+            </div>
+            <div class="stats">
+              <div>
+                <small>FPS</small><strong id="metric-fps">—</strong
+                ><span>кадр/с</span>
+              </div>
+              <div>
+                <small>Битрейт</small><strong id="metric-mbps">—</strong
+                ><span>Мбит/с</span>
+              </div>
+              <div>
+                <small>RTT</small><strong id="metric-rtt">—</strong
+                ><span>мс</span>
+              </div>
+              <div>
+                <small>Потеря пакетов</small><strong id="metric-lost">—</strong
+                ><span>%</span>
+              </div>
+            </div>
+          </section>
+        </div>
+        <aside class="stack">
+          <section class="panel pairing">
+            <div class="panelhead">
+              <h2>Подключить iPhone</h2>
+              <span class="phone-icon" aria-hidden="true"></span>
+            </div>
+            <div class="qrbox">
+              <img id="qr" alt="QR-код для подключения камеры" hidden /><span
+                id="qrWait"
+                >Подготовка QR…</span
+              >
+            </div>
+            <p>
+              Откройте камеру iPhone и отсканируйте QR-код в той же локальной
+              сети. При первом подключении
+              <a class="help-link" href="#https-help" id="certHelp"
+                >установите сертификат</a
+              >.
+            </p>
+            <div class="urlrow">
+              <code id="camAddress">Подготовка HTTPS…</code
+              ><button
+                id="copyCamera"
+                class="copy"
+                aria-label="Копировать ссылку камеры"
+                title="Копировать ссылку"
+              ></button>
+            </div>
+          </section>
+          <section class="panel output">
+            <div class="panelhead">
+              <h2>Выход в OBS</h2>
+              <i class="dot" id="obsDot"></i>
+            </div>
+            <p id="obsStatus">Ожидание Browser Source</p>
+            <code id="obsAddress" class="obs-address">127.0.0.1</code>
+            <button id="copyObs" class="secondary wide">
+              Копировать ссылку OBS
+            </button>
+          </section>
+        </aside>
+      </div>
+      <section class="panel settings">
+        <div class="panelhead">
+          <h2>Параметры камеры</h2>
+          <label class="profile"
+            >Профиль<select id="profile">
+              <option value="custom">Свой</option>
+              <option value="economy">Экономичный</option>
+              <option value="standard">Основной</option>
+              <option value="motion">Движение</option>
+            </select></label
+          >
+        </div>
+        <fieldset id="settingsFields" disabled>
+          <div class="fields">
+            <label
+              >Камера<select id="facing">
+                <option value="environment">Задняя</option>
+                <option value="user">Передняя</option>
+              </select></label
+            >
+            <label
+              >Разрешение<select id="height">
+                <option value="480">480p</option>
+                <option value="720">720p</option>
+                <option value="1080">1080p</option>
+              </select></label
+            >
+            <label
+              >Частота кадров<select id="fps">
+                <option>24</option>
+                <option>30</option>
+                <option>60</option>
+              </select></label
+            >
+            <label
+              >Битрейт, Мбит/с<input
+                id="mbps"
+                type="number"
+                min="1"
+                max="30"
+                step="1"
+                value="6"
+            /></label>
+            <label
+              >Поворот<select id="rotation">
+                <option value="0">0°</option>
+                <option value="90">90°</option>
+                <option value="180">180°</option>
+                <option value="270">270°</option>
+              </select></label
+            >
+            <label class="check"
+              ><input id="mirror" type="checkbox" />Зеркально</label
+            >
+            <label class="check"
+              ><input id="audio" type="checkbox" />Микрофон</label
+            >
+          </div>
+        </fieldset>
+        <p id="settingsNote" class="subtle" role="status">
+          Подключите iPhone для управления.
+        </p>
+      </section>
+      <details class="help" id="https-help">
+        <summary>Первое подключение и сертификат</summary>
+        <p>
+          Передайте на iPhone только публичный файл <code id="caPath">…</code> с
+          этого ПК через доверенный канал, например USB-накопитель. Откройте
+          файл на телефоне. Если вы согласны доверять этому корневому центру,
+          установите профиль в настройках iOS. Затем откройте «Основные → Об
+          этом устройстве → Доверие сертификатам» и включите полное доверие к
+          этому сертификату. После этого отсканируйте QR-код. Папку с приватными
+          ключами оставьте на ПК.
+        </p>
+      </details>
+      <div class="toast" id="toast" role="status" hidden></div>
+    </main>
+  </body>
+</html>
